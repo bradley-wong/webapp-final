@@ -2,12 +2,16 @@ const express = require('express');
 const hbs = require('hbs');
 const bodyParser = require('body-parser');
 const darksky = require('./darksky')
+const pixabay = require('./pixabay')
+const gmaps = require('./gmaps')
 
 port = process.env.PORT || 8080;
 
 var app = express();
 
 app.set('view engine', 'hbs');
+
+app.use(express.static(__dirname + '/views'));
 
 hbs.registerPartials(__dirname + '/views/partials');
 
@@ -32,7 +36,23 @@ app.get('/', (request, response) => {
     });
 });
 
+app.post('/', (request, response) => {
+    console.log(request.body)
+});
+
+app.get('/gallery', (request, response) => {
+    place = 'vancouver';
+    pixabay.city_background(place).then((result) => {
+        console.log(result);
+        response.send(`<h1>Gallery</h1><img src=${result[0]}><img src=${result[1]}><img src=${result[2]}><img src=${result[3]}>`)
+    }).catch((error) => {
+        response.send('Error: ', error);
+    });
+
+});
+
 app.get('/weather', (request, response) => {
+    place = 'vancouver'
     lat = 49.2827;
     lng = 123.1207;
 	darksky.getWeather(lat, lng).then((result) => {
