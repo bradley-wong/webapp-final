@@ -56,7 +56,7 @@ app.get('/weather', (request, response) => {
     lat = 49.2827;
     lng = 123.1207;
 	darksky.getWeather(lat, lng).then((result) => {
-        response.send(`The temperature is ${result.temp} and is ${result.status}`);
+        response.send(`The temperature is ${result.temp} and is ${result.status} <img src="img/sunny.png">`);
 	}).catch((error) => {
 		response.send('Error: ', error);
 	});
